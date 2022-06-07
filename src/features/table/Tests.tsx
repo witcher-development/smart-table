@@ -17,6 +17,11 @@ export const Page = () => {
 			id: 2,
 			name: 'Natasha',
 			age: 25,
+		},
+		{
+			id: 3,
+			name: 'Abraham',
+			age: 60,
 		}
 	];
 
