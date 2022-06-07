@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@router": ["./router"],
+      "@env": ["./env.ts"],
+      "@common/*": ["./features/common/*"],
+      "@table": ["./features/table/index.ts"]
+    }
+  }
+}
