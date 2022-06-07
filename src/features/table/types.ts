@@ -1,4 +1,3 @@
-export type Cell = {
-  column: string;
-  value: string;
-};
+export type Row = { [key: string]: any};
+
+export type Sort = { column: string, type: 'asc' | 'desc' };
