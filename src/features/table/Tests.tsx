@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Table } from '@table';
 
 
 export const Page = () => {
+	const [currentPage, setCurrentPage] = useState(1);
 
 	const columnNames = ['id', 'name', 'age'];
 
@@ -25,5 +26,12 @@ export const Page = () => {
 		}
 	];
 
-	return <Table columnNames={columnNames} rows={rows} />;
+	return (
+		<Table
+			columnNames={columnNames}
+			rows={[rows[currentPage - 1]]}
+			numberOfPages={3}
+			onPaginate={(pageNumber) => setCurrentPage(pageNumber)}
+		/>
+	);
 };

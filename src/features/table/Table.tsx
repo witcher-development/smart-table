@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import cx from 'classnames';
 
 import { Row, Sort } from './types';
 import cls from './Table.module.scss';
@@ -6,13 +7,16 @@ import cls from './Table.module.scss';
 
 type Props = {
   columnNames: string[],
-  rows: Row[]
+  rows: Row[],
+	numberOfPages?: number,
+	onPaginate?: (page: number) => void,
 }
 
-export const Table = ({ columnNames, rows }: Props) => {
+export const Table = ({ columnNames, rows, numberOfPages, onPaginate }: Props) => {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [sort, setSort] = useState<Sort | null>(null);
 	const [filteredRows, setFilteredRows] = useState(rows);
+	const [currentPage, setCurrentPage] = useState(1);
 
 	const filterRowsBySearchQuery = (searchQuery: string, rows: Row[]) => rows.filter((row) => Object.values(row).some((cell) => String(cell).toLowerCase().includes(searchQuery.toLowerCase())));
 	const sortRows = (sort: Sort, rows: Row[]) => rows.sort((row1, row2) => {
@@ -35,11 +39,33 @@ export const Table = ({ columnNames, rows }: Props) => {
 	};
 
 	useEffect(() => {
-		console.log('changed');
 		const bySearch = filterRowsBySearchQuery(searchQuery, rows);
 		const bySort = sort ? sortRows(sort, bySearch) : bySearch;
 		setFilteredRows(bySort);
-	}, [searchQuery, sort]);
+	}, [searchQuery, sort, rows]);
+
+	const onClickPagination = (page: number) => {
+		setCurrentPage(page);
+
+		if (onPaginate) {
+			onPaginate(page);
+		}
+	};
+
+	const getPagesToRender = (numberOfPages: number) => {
+		const onLeft = currentPage < 2 ? [] : Array(currentPage - 1).fill(0).map((_, index) => index + 1);
+		const onRight =
+			currentPage < numberOfPages
+				? Array(numberOfPages - currentPage)
+					.fill(0).map((_, index) => currentPage + index + 1)
+				: [];
+
+		return {
+			onLeft: onLeft.slice(-3),
+			current: currentPage,
+			onRight: onRight.slice(0, 3)
+		};
+	};
 
 	const arrowUp = <>&#8593;</>;
 	const arrowDown = <>&#8595;</>;
@@ -81,6 +107,53 @@ export const Table = ({ columnNames, rows }: Props) => {
 					</div>
 				))}
 			</div>
+			{numberOfPages && (
+				<div className={cls.footer}>
+					<nav>
+						<ul className={cls.pagination}>
+							{(() => {
+								const pages = getPagesToRender(numberOfPages);
+
+								return (
+									<>
+										{pages.onLeft.map((pageNumber, index) => (
+											<li
+												key={pageNumber}
+												className={cls.notMiddlePage}
+												style={{
+													transform: `translateX(${-(pages.onLeft.length - index) * 100}%)`
+												}}
+												onClick={() => onClickPagination(pageNumber)}
+											>
+												{pageNumber}
+											</li>
+										))}
+										<li
+											key={currentPage}
+											className={cx(cls.page, cls.current)}
+											onClick={() => onClickPagination(currentPage)}
+										>
+											{currentPage}
+										</li>
+										{pages.onRight.map((pageNumber, index) => (
+											<li
+												key={pageNumber}
+												className={cls.notMiddlePage}
+												style={{
+													transform: `translateX(${(index + 1) * 100}%)`
+												}}
+												onClick={() => onClickPagination(pageNumber)}
+											>
+												{pageNumber}
+											</li>
+										))}
+									</>
+								);
+							})()}
+						</ul>
+					</nav>
+				</div>
+			)}
 		</div>
 	);
 };
