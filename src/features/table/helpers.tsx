@@ -18,3 +18,9 @@ export const getArrowByColumnName = (sort: Sort | null, columnName: string) => {
 		return arrowUp;
 	}
 };
+
+export const booleanFromString = (value: string) => {
+	if (!value) return null;
+	if (value === 'false') return false;
+	if (value === 'true') return true;
+};

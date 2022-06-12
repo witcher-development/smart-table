@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-import { getArrowByColumnName } from './helpers';
-import { Row, Sort, PaginationConfig, Column } from './types';
+import { getArrowByColumnName, booleanFromString } from './helpers';
+import { Row, Sort, PaginationConfig, Column, FiltersState } from './types';
 import { Pagination } from './Pagination';
 import cls from './Table.module.scss';
 import { Filters } from './Filters';
@@ -16,10 +16,15 @@ type Props = {
 export const Table = ({ columns, rows, paginationConfig }: Props) => {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [sort, setSort] = useState<Sort | null>(null);
+	const [filtersState, setFiltersState] = useState<FiltersState>({});
 	const [filteredRows, setFilteredRows] = useState(rows);
 
 	const filterRowsBySearchQuery =
 		(searchQuery: string, rows: Row[]) => rows.filter((row) => Object.values(row).some((cell) => String(cell).toLowerCase().includes(searchQuery.toLowerCase())));
+
+	const filterRows =
+		(filters: FiltersState, rows: Row[]) => rows.filter((row) => Object.keys(filters).every((filterName) => filters[filterName].value === row[filterName]));
+
 	const sortRows = (sort: Sort, rows: Row[]) => rows.sort((row1, row2) => {
 		if (row1[sort.column] > row2[sort.column]) {
 			return sort.type === 'asc' ? 1 : -1;
@@ -41,15 +46,19 @@ export const Table = ({ columns, rows, paginationConfig }: Props) => {
 
 	useEffect(() => {
 		const bySearch = filterRowsBySearchQuery(searchQuery, rows);
-		const bySort = sort ? sortRows(sort, bySearch) : bySearch;
+		console.log('bySearch', bySearch);
+		const byFilters = filterRows(filtersState, bySearch);
+		console.log('byFilters', byFilters);
+		const bySort = sort ? sortRows(sort, byFilters) : byFilters;
+		console.log('bySort', bySort);
 		setFilteredRows(bySort);
-	}, [searchQuery, sort, rows]);
+	}, [searchQuery, sort, filtersState, rows]);
 
 	return (
 		<div className={cls.table}>
 			<div className={cls.tools}>
 				<input type="text" value={searchQuery} onInput={(e) => setSearchQuery(e.currentTarget.value)} />
-				<Filters columns={columns} />
+				<Filters columns={columns} onChange={(filtersState) => setFiltersState(filtersState)} />
 			</div>
 			<div className={cls.header}>
 				{columns.map(({ name }) => (

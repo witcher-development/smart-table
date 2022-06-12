@@ -12,3 +12,10 @@ export type PaginationConfig = {
   onPaginate: (page: number) => void,
   visiblePagesOnSidesNumber?: number,
 }
+
+export type FiltersState = {
+ [key: string]: {
+   dataType: 'boolean',
+   value: true | false
+ }
+}

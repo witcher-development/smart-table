@@ -49,11 +49,7 @@ export const Page = () => {
 	return (
 		<Table
 			columns={columns}
-			rows={[rows[currentPage - 1]]}
-			paginationConfig={{
-				numberOfPages: 3,
-				onPaginate: (pageNumber) => setCurrentPage(pageNumber),
-			}}
+			rows={rows}
 		/>
 	);
 };
