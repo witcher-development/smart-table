@@ -1,6 +1,12 @@
+export enum ColumnDataType {
+  String = 'string',
+  Number = 'number',
+  Boolean = 'boolean',
+}
+
 export type Column = {
   name: string,
-  dataType: 'string' | 'number' | 'boolean'
+  dataType: ColumnDataType
 }
 
 export type Row = { [key: string]: any};
@@ -13,10 +19,32 @@ export type PaginationConfig = {
   visiblePagesOnSidesNumber?: number,
 }
 
+export type BooleanFilterValue = boolean;
+type BooleanFilterField = {
+  dataType: ColumnDataType.Boolean,
+  value: BooleanFilterValue
+}
+
+export type StringFilterValue = string[];
+type StringFilterField = {
+  dataType: ColumnDataType.String,
+  value: StringFilterValue
+}
+
+export type NumberFilterValue = {
+  moreThan: number | null,
+  lessThan: number | null,
+}
+type NumberFilterField = {
+  dataType: ColumnDataType.Number,
+  value: NumberFilterValue
+}
+
+export type FilterValueTypes = BooleanFilterValue | StringFilterValue | NumberFilterValue;
+export type FilterFieldTypes = BooleanFilterField | StringFilterField | NumberFilterField;
+
 export type FiltersState = {
  [key: string]: {
    isApplied: boolean,
-   dataType: 'boolean',
-   value: boolean
- }
+ } & FilterFieldTypes
 }

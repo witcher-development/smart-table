@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Column, Table } from '@table';
+import { Column, ColumnDataType, Table } from '@table';
 
 
 export const Page = () => {
@@ -9,19 +9,19 @@ export const Page = () => {
 	const columns: Column[] = [
 		{
 			name: 'id',
-			dataType: 'number'
+			dataType: ColumnDataType.Number
 		},
 		{
 			name: 'name',
-			dataType: 'string'
+			dataType: ColumnDataType.String
 		},
 		{
 			name: 'age',
-			dataType: 'number'
+			dataType: ColumnDataType.Number
 		},
 		{
 			name: 'cool',
-			dataType: 'boolean'
+			dataType: ColumnDataType.Boolean
 		}
 	];
 

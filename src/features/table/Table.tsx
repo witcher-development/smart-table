@@ -46,11 +46,8 @@ export const Table = ({ columns, rows, paginationConfig }: Props) => {
 
 	useEffect(() => {
 		const bySearch = filterRowsBySearchQuery(searchQuery, rows);
-		console.log('bySearch', bySearch);
 		const byFilters = filterRows(filtersState, bySearch);
-		console.log('byFilters', byFilters);
 		const bySort = sort ? sortRows(sort, byFilters) : byFilters;
-		console.log('bySort', bySort);
 		setFilteredRows(bySort);
 	}, [searchQuery, sort, filtersState, rows]);
 
