@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import { getArrowByColumnName } from './helpers';
 import { Row, Sort, PaginationConfig } from './types';
 import { Pagination } from './Pagination';
 import cls from './Table.module.scss';
@@ -42,22 +43,6 @@ export const Table = ({ columnNames, rows, paginationConfig }: Props) => {
 		setFilteredRows(bySort);
 	}, [searchQuery, sort, rows]);
 
-	const arrowUp = <>&#8593;</>;
-	const arrowDown = <>&#8595;</>;
-	const arrowUpDown = <>&#8645;</>;
-
-	const getArrowByColumnName = (columnName: string) => {
-		if (!sort || columnName !== sort.column) {
-			return arrowUpDown;
-		}
-		if (sort.type === 'asc') {
-			return arrowDown;
-		}
-		if (sort.type === 'desc') {
-			return arrowUp;
-		}
-	};
-
 	return (
 		<div className={cls.table}>
 			<div className={cls.tools}>
@@ -71,7 +56,7 @@ export const Table = ({ columnNames, rows, paginationConfig }: Props) => {
 						onClick={() => onClickSort(columnName)}
 					>
 						{columnName}
-						{getArrowByColumnName(columnName)}
+						{getArrowByColumnName(sort, columnName)}
 					</div>
 				))}
 			</div>
