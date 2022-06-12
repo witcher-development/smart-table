@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from 'react';
 
 import { getArrowByColumnName } from './helpers';
-import { Row, Sort, PaginationConfig } from './types';
+import { Row, Sort, PaginationConfig, Column } from './types';
 import { Pagination } from './Pagination';
 import cls from './Table.module.scss';
+import { Filters } from './Filters';
 
 
 type Props = {
-  columnNames: string[],
+  columns: Column[],
   rows: Row[],
 	paginationConfig?: PaginationConfig
 }
 
-export const Table = ({ columnNames, rows, paginationConfig }: Props) => {
+export const Table = ({ columns, rows, paginationConfig }: Props) => {
 	const [searchQuery, setSearchQuery] = useState('');
 	const [sort, setSort] = useState<Sort | null>(null);
 	const [filteredRows, setFilteredRows] = useState(rows);
 
-	const filterRowsBySearchQuery = (searchQuery: string, rows: Row[]) => rows.filter((row) => Object.values(row).some((cell) => String(cell).toLowerCase().includes(searchQuery.toLowerCase())));
+	const filterRowsBySearchQuery =
+		(searchQuery: string, rows: Row[]) => rows.filter((row) => Object.values(row).some((cell) => String(cell).toLowerCase().includes(searchQuery.toLowerCase())));
 	const sortRows = (sort: Sort, rows: Row[]) => rows.sort((row1, row2) => {
 		if (row1[sort.column] > row2[sort.column]) {
 			return sort.type === 'asc' ? 1 : -1;
@@ -47,23 +49,24 @@ export const Table = ({ columnNames, rows, paginationConfig }: Props) => {
 		<div className={cls.table}>
 			<div className={cls.tools}>
 				<input type="text" value={searchQuery} onInput={(e) => setSearchQuery(e.currentTarget.value)} />
+				<Filters columns={columns} />
 			</div>
 			<div className={cls.header}>
-				{columnNames.map((columnName) => (
+				{columns.map(({ name }) => (
 					<div
-						key={columnName}
+						key={name}
 						className={cls.headerCell}
-						onClick={() => onClickSort(columnName)}
+						onClick={() => onClickSort(name)}
 					>
-						{columnName}
-						{getArrowByColumnName(sort, columnName)}
+						{name}
+						{getArrowByColumnName(sort, name)}
 					</div>
 				))}
 			</div>
 			<div>
 				{filteredRows.map((row, index) => (
 					<div key={index} className={cls.row}>
-						{columnNames.map((column) => <div key={column} className={cls.cell}>{row[column]}</div>)}
+						{columns.map(({ name }) => <div key={name} className={cls.cell}>{String(row[name])}</div>)}
 					</div>
 				))}
 				{!filteredRows.length && searchQuery && (
