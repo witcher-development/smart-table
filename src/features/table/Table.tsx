@@ -81,6 +81,11 @@ export const Table = ({ columnNames, rows, paginationConfig }: Props) => {
 						{columnNames.map((column) => <div key={column} className={cls.cell}>{row[column]}</div>)}
 					</div>
 				))}
+				{!filteredRows.length && searchQuery && (
+					<div className={cls.cell}>
+						no results
+					</div>
+				)}
 			</div>
 			<div className={cls.footer}>
 				{paginationConfig && <Pagination paginationConfig={paginationConfig} />}
