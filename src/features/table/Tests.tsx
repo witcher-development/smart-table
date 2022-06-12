@@ -23,15 +23,17 @@ export const Page = () => {
 			id: 3,
 			name: 'Abraham',
 			age: 60,
-		}
+		},
 	];
 
 	return (
 		<Table
 			columnNames={columnNames}
 			rows={[rows[currentPage - 1]]}
-			numberOfPages={3}
-			onPaginate={(pageNumber) => setCurrentPage(pageNumber)}
+			paginationConfig={{
+				numberOfPages: 3,
+				onPaginate: (pageNumber) => setCurrentPage(pageNumber),
+			}}
 		/>
 	);
 };

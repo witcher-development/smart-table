@@ -48,32 +48,3 @@
 
   padding: 8px 16px;
 }
-
-.pagination {
-  position: relative;
-}
-
-.page {
-  width: 36px;
-  padding: 4px 8px;
-
-  text-align: center;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #ccc;
-    color: #fff;
-  }
-
-  &.current {
-    background-color: #000;
-    color: #fff;
-  }
-}
-
-.notMiddlePage {
-  @extend .page;
-
-  position: absolute;
-  top: 0;
-}
