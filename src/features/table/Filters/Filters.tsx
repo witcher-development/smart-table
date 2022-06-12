@@ -31,7 +31,6 @@ export const Filters = ({ columns, onChange }: Props) => {
 		});
 
 		setFiltersState(newState);
-		submitNewFilterState(newState);
 	}, [columns]);
 
 	const changeFilterStatus = (name: string, isApplied: boolean) => {
@@ -44,7 +43,6 @@ export const Filters = ({ columns, onChange }: Props) => {
 		};
 
 		setFiltersState(newState);
-		submitNewFilterState(newState);
 	};
 
 	const updateFilterValue = (name: string, value: boolean) => {
@@ -57,7 +55,6 @@ export const Filters = ({ columns, onChange }: Props) => {
 		};
 
 		setFiltersState(newState);
-		submitNewFilterState(newState);
 	};
 
 	const submitNewFilterState = (newState: FiltersState) => {
@@ -69,6 +66,10 @@ export const Filters = ({ columns, onChange }: Props) => {
 		});
 		onChange(onlyAppliedFilters);
 	};
+
+	useEffect(() => {
+		submitNewFilterState(filtersState);
+	}, [filtersState]);
 
 	return (
 		<Dropdown triggerLabel="Filters" className={cls.dropdown}>
