@@ -28,7 +28,8 @@ type BooleanFilterField = {
 export type StringFilterValue = string[];
 type StringFilterField = {
   dataType: ColumnDataType.String,
-  value: StringFilterValue
+  value: StringFilterValue,
+  possibleValues: string[],
 }
 
 export type NumberFilterValue = {

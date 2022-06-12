@@ -19,11 +19,10 @@ export const getArrowByColumnName = (sort: Sort | null, columnName: string) => {
 	}
 };
 
-export const booleanFromString = (value: string) => {
-	if (!value) return null;
-	if (value === 'false') return false;
-	if (value === 'true') return true;
-};
+export const getOptionsForStringFilter = (allValues: string[]) => allValues.reduce<string[]>((prev, curr) => {
+	if (prev.includes(curr)) return prev;
+	return [...prev, curr];
+}, []);
 
 
 export const getTypedBooleanFilterValue = (value: any): BooleanFilterValue => {
