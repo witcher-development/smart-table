@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { getArrowByColumnName, booleanFromString } from './helpers';
+import { getArrowByColumnName } from './helpers';
 import { Row, Sort, PaginationConfig, Column, FiltersState } from './types';
 import { Pagination } from './Pagination';
 import cls from './Table.module.scss';

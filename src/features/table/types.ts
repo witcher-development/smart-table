@@ -15,7 +15,8 @@ export type PaginationConfig = {
 
 export type FiltersState = {
  [key: string]: {
+   isApplied: boolean,
    dataType: 'boolean',
-   value: true | false
+   value: boolean
  }
 }

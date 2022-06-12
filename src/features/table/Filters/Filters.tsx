@@ -20,6 +20,7 @@ export const Filters = ({ columns, onChange }: Props) => {
 			switch (dataType) {
 				case 'boolean': {
 					newState[name] = {
+						isApplied: filtersState[name]?.isApplied || false,
 						dataType: 'boolean',
 						value: filtersState[name]?.value || false,
 					};
@@ -30,11 +31,24 @@ export const Filters = ({ columns, onChange }: Props) => {
 		});
 
 		setFiltersState(newState);
-		onChange(newState);
+		submitNewFilterState(newState);
 	}, [columns]);
 
-	const updateFilterField = (name: string, value: boolean) => {
-		const newState = {
+	const changeFilterStatus = (name: string, isApplied: boolean) => {
+		const newState: FiltersState = {
+			...filtersState,
+			[name]: {
+				...filtersState[name],
+				isApplied,
+			}
+		};
+
+		setFiltersState(newState);
+		submitNewFilterState(newState);
+	};
+
+	const updateFilterValue = (name: string, value: boolean) => {
+		const newState: FiltersState = {
 			...filtersState,
 			[name]: {
 				...filtersState[name],
@@ -43,21 +57,40 @@ export const Filters = ({ columns, onChange }: Props) => {
 		};
 
 		setFiltersState(newState);
-		onChange(newState);
+		submitNewFilterState(newState);
+	};
+
+	const submitNewFilterState = (newState: FiltersState) => {
+		const onlyAppliedFilters: FiltersState = {};
+		Object.keys(newState).forEach((name) => {
+			if (newState[name].isApplied) {
+				onlyAppliedFilters[name] = newState[name];
+			}
+		});
+		onChange(onlyAppliedFilters);
 	};
 
 	return (
 		<Dropdown triggerLabel="Filters" className={cls.dropdown}>
 			<div>
 				{ Object.keys(filtersState).map((name, index) => {
-					const { dataType, value } = filtersState[name];
+					const { dataType, value, isApplied } = filtersState[name];
 
 					return (
 						<div key={name}>
 							<div className={cls.section}>
-								<h6>{name}</h6>
+								<h6>
+									<label>
+										{name}
+										<input
+											type="checkbox"
+											checked={isApplied}
+											onChange={() => changeFilterStatus(name, !isApplied)}
+										/>
+									</label>
+								</h6>
 
-								{dataType === 'boolean' && (
+								{isApplied && dataType === 'boolean' && (
 									<div>
 										<label>
 											true
@@ -66,7 +99,7 @@ export const Filters = ({ columns, onChange }: Props) => {
 												name={name}
 												value="true"
 												checked={value}
-												onChange={() => updateFilterField(name, true)}
+												onChange={() => updateFilterValue(name, true)}
 											/>
 										</label>
 										<label>
@@ -76,7 +109,7 @@ export const Filters = ({ columns, onChange }: Props) => {
 												name={name}
 												value="false"
 												checked={!value}
-												onChange={() => updateFilterField(name, false)}
+												onChange={() => updateFilterValue(name, false)}
 											/>
 										</label>
 									</div>
