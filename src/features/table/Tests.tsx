@@ -44,12 +44,23 @@ export const Page = () => {
 			age: 60,
 			cool: true
 		},
+		{
+			id: 4,
+			name: 'Nikita',
+			age: 20,
+			cool: false
+		},
 	];
 
 	return (
 		<Table
 			columns={columns}
 			rows={rows}
+			// rows={[rows[currentPage - 1]]}
+			// paginationConfig={{
+			// 	numberOfPages: 4,
+			// 	onPaginate: (pageNumber) => setCurrentPage(pageNumber)
+			// }}
 		/>
 	);
 };
