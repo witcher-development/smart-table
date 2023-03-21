@@ -21,11 +21,11 @@ import { StringFilter } from './StringFilter';
 
 type Props = {
   columns: Column[],
-	rows: Row[],
+	// rows: Row[],
 	onChange: (filtersState: FiltersState) => void,
 };
 
-export const Filters = ({ columns, rows, onChange }: Props) => {
+export const Filters = ({ columns, onChange }: Props) => {
 	const [filtersState, setFiltersState] = useState<FiltersState>({});
 
 	useEffect(() => {
@@ -48,23 +48,23 @@ export const Filters = ({ columns, rows, onChange }: Props) => {
 					}
 					break;
 				}
-				case ColumnDataType.String: {
-					if (!filtersState[name] || filtersState[name].dataType !== ColumnDataType.String) {
-						newState[name] = {
-							isApplied: false,
-							dataType: ColumnDataType.String,
-							value: [],
-							possibleValues: getOptionsForStringFilter(rows.map((row) => row[name]))
-						};
-					} else {
-						newState[name] = {
-							isApplied: filtersState[name].isApplied,
-							dataType: ColumnDataType.Boolean,
-							value: filtersState[name].value as boolean,
-						};
-					}
-					break;
-				}
+				// case ColumnDataType.String: {
+				// 	if (!filtersState[name] || filtersState[name].dataType !== ColumnDataType.String) {
+				// 		newState[name] = {
+				// 			isApplied: false,
+				// 			dataType: ColumnDataType.String,
+				// 			value: [],
+				// 			possibleValues: getOptionsForStringFilter(rows.map((row) => row[name]))
+				// 		};
+				// 	} else {
+				// 		newState[name] = {
+				// 			isApplied: filtersState[name].isApplied,
+				// 			dataType: ColumnDataType.Boolean,
+				// 			value: filtersState[name].value as boolean,
+				// 		};
+				// 	}
+				// 	break;
+				// }
 				default:
 			}
 		});
@@ -146,7 +146,7 @@ export const Filters = ({ columns, rows, onChange }: Props) => {
 			<div>
 				{ Object.keys(filtersState).map((name, index) => {
 					const { dataType, value, isApplied } = filtersState[name];
-					const possibleValues = filtersState[name].possibleValues || null;
+					// const possibleValues = filtersState[name].possibleValues || null;
 
 					return (
 						<div key={name}>
@@ -171,14 +171,14 @@ export const Filters = ({ columns, rows, onChange }: Props) => {
 												updateValue={(value) => updateFilterValue(name, value)}
 											/>
 										)}
-										{dataType === ColumnDataType.String && (
-											<StringFilter
-												filterName={name}
-												currentValue={value}
-												updateValue={(value) => updateFilterValue(name, value)}
-												possibleValues={possibleValues}
-											/>
-										)}
+										{/*{dataType === ColumnDataType.String && (*/}
+										{/*	<StringFilter*/}
+										{/*		filterName={name}*/}
+										{/*		currentValue={value}*/}
+										{/*		updateValue={(value) => updateFilterValue(name, value)}*/}
+										{/*		possibleValues={possibleValues}*/}
+										{/*	/>*/}
+										{/*)}*/}
 									</>
 								)}
 							</div>

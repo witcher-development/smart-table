@@ -29,7 +29,7 @@ export type StringFilterValue = string[];
 type StringFilterField = {
   dataType: ColumnDataType.String,
   value: StringFilterValue,
-  possibleValues: string[],
+  // possibleValues: string[],
 }
 
 export type NumberFilterValue = {
